@@ -4,6 +4,7 @@ namespace Shimoning\LineLogin\Communicator;
 
 use Shimoning\LineLogin\Client\Request;
 use Shimoning\LineLogin\Entities\AccessTokenCapsule;
+use Shimoning\LineLogin\Entities\IdTokenVerifiedResult;
 
 use Shimoning\LineLogin\Utilities\Url;
 use Shimoning\LineLogin\Exceptions\RequestException;
@@ -136,12 +137,23 @@ class OAuth
         return true;
     }
 
+    /**
+     * IDトークンを検証する
+     *
+     * @see https://developers.line.biz/ja/reference/line-login/#verify-id-token
+     *
+     * @param string $channelId
+     * @param string $idToken
+     * @param string|null $nonce
+     * @param string|null $userId
+     * @return IdTokenVerifiedResult
+     */
     public static function verifyIdToken(
         string $channelId,
         string $idToken,
-        string $nonce = null,
-        string $userId = null
-    ) {
+        ?string $nonce = null,
+        ?string $userId = null
+    ): IdTokenVerifiedResult {
         $data = [
             'client_id' => $channelId,
             'id_token'  => $idToken,
@@ -153,18 +165,15 @@ class OAuth
             $data['user_id'] = $userId;
         }
 
-        // TODO: implement
-        throw new NotSupportedException('現在このメソッドはサポートしていません。');
-
         $response = (new Request(['with_form' => true]))->post(
             Url::generate(self::BASE_ENDPOINT, 'verify'),
             $data,
         );
         $body = $response->getJSONDecodedBody();
         if (!$response->isSucceeded()) {
-            throw new RequestException('アクセストークンの取り消しに失敗しました。' . $body['error_description']);
+            throw new RequestException('IDトークンを検証に失敗しました。' . $body['error_description']);
         }
 
-        return $body;
+        return new IdTokenVerifiedResult($body);
     }
 }

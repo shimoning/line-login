@@ -18,8 +18,19 @@ class Base
         }
     }
 
-    public function getRaw()
+    /**
+     * @return array
+     */
+    public function getRaw(): array
     {
         return $this->_raw;
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return \get_object_vars($this);
     }
 }

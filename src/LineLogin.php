@@ -8,6 +8,7 @@ use Shimoning\LineLogin\Communicator\UserProfile;
 use Shimoning\LineLogin\Communicator\Friendship;
 
 use Shimoning\LineLogin\Entities\AccessTokenCapsule;
+use Shimoning\LineLogin\Entities\IdTokenVerifiedResult;
 use Shimoning\LineLogin\Entities\UserProfile as UserProfileEntity;
 use Shimoning\LineLogin\Entities\FriendshipStatus;
 
@@ -141,13 +142,20 @@ class LINELogin
      * OpenId の検証
      *
      * @param string $idToken
-     * @return void
+     * @param string|null $nonce
+     * @param string|null $userId
+     * @return IdTokenVerifiedResult
      */
-    public function verifyIdToken(string $idToken)
-    {
+    public function verifyIdToken(
+        string $idToken,
+        ?string $nonce = null,
+        ?string $userId = null
+    ): IdTokenVerifiedResult {
         return OAuth::verifyIdToken(
             $this->channelId,
             $idToken,
+            $nonce,
+            $userId
         );
     }
 

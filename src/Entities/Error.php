@@ -16,12 +16,6 @@ class Error extends Base
      */
     protected $errorDescription;
 
-    /**
-     * 認可URLに含めたstateパラメータ。この値で、どのプロセスが拒否されたか特定できます。
-     * @var string|null
-     */
-    protected $status;
-
     public function getError(): string
     {
         return $this->error;
@@ -29,11 +23,6 @@ class Error extends Base
 
     public function getErrorDescription(): ?string
     {
-        return $this->expiresIn ?? null;
-    }
-
-    public function getStatus(): ?string
-    {
-        return $this->status ?? null;
+        return $this->errorDescription ?? null;
     }
 }
