@@ -63,7 +63,7 @@ class LINELogin
             $this->callbackUrl,
             $scopeList,
             $status,
-            $botPrompt,
+            $botPrompt
         );
     }
 
@@ -93,7 +93,7 @@ class LINELogin
             $this->channelId,
             $this->channelSecret,
             $this->callbackUrl,
-            $code,
+            $code
         );
     }
 
@@ -119,7 +119,7 @@ class LINELogin
         return OAuth::refreshAccessToken(
             $this->channelId,
             $this->channelSecret,
-            $refreshToken,
+            $refreshToken
         );
     }
 
@@ -134,7 +134,7 @@ class LINELogin
         return OAuth::revokeAccessToken(
             $this->channelId,
             $this->channelSecret,
-            $accessToken,
+            $accessToken
         );
     }
 

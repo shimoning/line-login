@@ -5,10 +5,8 @@ namespace Shimoning\LineLogin\Communicator;
 use Shimoning\LineLogin\Client\Request;
 use Shimoning\LineLogin\Entities\AccessTokenCapsule;
 use Shimoning\LineLogin\Entities\IdTokenVerifiedResult;
-
 use Shimoning\LineLogin\Utilities\Url;
 use Shimoning\LineLogin\Exceptions\RequestException;
-use Shimoning\LineLogin\Exceptions\NotSupportedException;
 
 class OAuth
 {
@@ -41,7 +39,7 @@ class OAuth
         ];
         $response = (new Request(['with_form' => true]))->post(
             Url::generate(self::BASE_ENDPOINT, 'token'),
-            $data,
+            $data
         );
         $body = $response->getJSONDecodedBody();
         if (!$response->isSucceeded()) {
@@ -63,7 +61,7 @@ class OAuth
     {
         $response = (new Request())->get(
             Url::generate(self::BASE_ENDPOINT, 'verify'),
-            ['access_token' => $accessToken],
+            ['access_token' => $accessToken]
         );
 
         return $response->isSucceeded();
@@ -93,7 +91,7 @@ class OAuth
         ];
         $response = (new Request(['with_form' => true]))->post(
             Url::generate(self::BASE_ENDPOINT, 'token'),
-            $data,
+            $data
         );
         $body = $response->getJSONDecodedBody();
         if (!$response->isSucceeded()) {
@@ -126,7 +124,7 @@ class OAuth
         ];
         $response = (new Request(['with_form' => true]))->post(
             Url::generate(self::BASE_ENDPOINT, 'revoke'),
-            $data,
+            $data
         );
         // 成功時に body は空になる
         if (!$response->isSucceeded()) {
@@ -167,7 +165,7 @@ class OAuth
 
         $response = (new Request(['with_form' => true]))->post(
             Url::generate(self::BASE_ENDPOINT, 'verify'),
-            $data,
+            $data
         );
         $body = $response->getJSONDecodedBody();
         if (!$response->isSucceeded()) {

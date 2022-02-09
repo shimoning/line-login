@@ -4,9 +4,7 @@ namespace Shimoning\LineLogin\Communicator;
 
 use Shimoning\LineLogin\Client\Request;
 use Shimoning\LineLogin\Entities\FriendshipStatus;
-
 use Shimoning\LineLogin\Utilities\Url;
-
 use Shimoning\LineLogin\Exceptions\RequestException;
 
 /**
@@ -28,7 +26,7 @@ class Friendship
     public static function getStatus(string $accessToken): FriendshipStatus
     {
         $response = (new Request(['authorization' => $accessToken]))->get(
-            Url::generate(self::BASE_ENDPOINT, 'status'),
+            Url::generate(self::BASE_ENDPOINT, 'status')
         );
         $body = $response->getJSONDecodedBody();
         if (!$response->isSucceeded()) {

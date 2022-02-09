@@ -11,10 +11,8 @@ class Request
     private $_timeout = 0;
     /** @var float */
     private $_connectTimeout = 0;
-
     /** @var bool */
     private $_withForm = false;
-
     /** @var string|null */
     private $_authorization = null;
 
@@ -78,7 +76,7 @@ class Request
             'http_errors' => false,
             'headers' => \array_merge(
                 $this->headers(),
-                $headers,
+                $headers
             ),
         ];
         if (!empty($data)) {
@@ -93,14 +91,14 @@ class Request
         $response = $this->_client->request(
             $method,
             $uri,
-            $options,
+            $options
         );
 
         // レスポンスを返す
         return new Response(
             $response->getStatusCode(),
             $response->getBody()->getContents(),
-            $response->getHeaders(),
+            $response->getHeaders()
         );
     }
 

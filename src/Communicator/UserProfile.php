@@ -4,7 +4,6 @@ namespace Shimoning\LineLogin\Communicator;
 
 use Shimoning\LineLogin\Client\Request;
 use Shimoning\LineLogin\Entities\UserProfile as UserProfileEntity;
-
 use Shimoning\LineLogin\Exceptions\RequestException;
 
 /**
@@ -26,7 +25,7 @@ class UserProfile
     public static function getUserProfile(string $accessToken): UserProfileEntity
     {
         $response = (new Request(['authorization' => $accessToken]))->get(
-            self::BASE_ENDPOINT,
+            self::BASE_ENDPOINT
         );
         $body = $response->getJSONDecodedBody();
         if (!$response->isSucceeded()) {
