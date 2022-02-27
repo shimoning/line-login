@@ -2,6 +2,7 @@
 
 namespace Shimoning\LineLogin\Communicator;
 
+use Shimoning\LineLogin\Entities\CallbackParameters;
 use Shimoning\LineLogin\Utilities\Nonce;
 use Shimoning\LineLogin\Utilities\Url;
 
@@ -64,6 +65,30 @@ class Negotiator
         $query,
         ?string $state = null
     ): string {
+        $parsed = self::parseCallbackParameters($query);
+
+        if (! \is_null($state)) {
+            if ($state !== $parsed->getState()) {
+                throw new ValidationException('state の値が一致しませんでした。');
+            }
+        }
+
+        if (empty($parsed->getCode())) {
+            throw new InvalidArgumentException();
+        }
+        return $parsed->getCode();
+    }
+
+    /**
+     * コールバックに付与されたクエリをパースする
+     *
+     * @param array|string $query
+     * @return CallbackParameters
+     * @throws InvalidArgumentException
+     * @throws JsonParseException
+     */
+    public static function parseCallbackParameters($query): CallbackParameters
+    {
         if (!\is_array($query) && !\is_string($query)) {
             throw new InvalidArgumentException();
         }
@@ -75,21 +100,6 @@ class Negotiator
             }
         }
 
-        if (!\is_null($state)) {
-            if ($state !== $query['state'] ?? null) {
-                throw new ValidationException('state の値が一致しませんでした。');
-            }
-        }
-
-        // TODO: validate other params
-        // $callbackUrl = $query['liffRedirectUri'] ?? null;
-        // $channelId = $query['liffClientId'] ?? null;
-
-        $code = $query['code'] ?? null;
-        if (empty($code)) {
-            throw new InvalidArgumentException();
-        }
-
-        return $code;
+        return new CallbackParameters($query);
     }
 }
