@@ -2,7 +2,7 @@
 
 namespace Shimoning\LineLogin\Entities;
 
-class Error extends Base
+class Error extends Output
 {
     /**
      * エラーコード

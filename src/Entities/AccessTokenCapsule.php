@@ -2,7 +2,7 @@
 
 namespace Shimoning\LineLogin\Entities;
 
-class AccessTokenCapsule extends Base
+class AccessTokenCapsule extends Output
 {
     /**
      * アクセストークン。

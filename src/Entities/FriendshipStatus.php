@@ -2,11 +2,10 @@
 
 namespace Shimoning\LineLogin\Entities;
 
-class FriendshipStatus extends Base
+class FriendshipStatus extends Output
 {
     /**
      * 友達状態
-     * @var string
      * @var bool
      */
     protected $friendFlag;

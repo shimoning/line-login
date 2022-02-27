@@ -5,7 +5,7 @@ namespace Shimoning\LineLogin\Entities;
 /**
  * @see https://developers.line.biz/ja/reference/line-login/#verify-access-token
  */
-class AccessTokenVerifiedResult extends Base
+class AccessTokenVerifiedResult extends Output
 {
     /**
      * アクセストークンが発行されたチャネルID

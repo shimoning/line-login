@@ -2,7 +2,7 @@
 
 namespace Shimoning\LineLogin\Entities;
 
-class IdTokenVerifiedResult extends Base
+class IdTokenVerifiedResult extends Output
 {
     /**
      * IDトークンの生成URL

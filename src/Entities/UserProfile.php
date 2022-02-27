@@ -2,7 +2,7 @@
 
 namespace Shimoning\LineLogin\Entities;
 
-class UserProfile extends Base
+class UserProfile extends Output
 {
     /**
      * ユーザーID

@@ -2,15 +2,16 @@
 
 namespace Shimoning\LineLogin\Entities;
 
-class Base
+class Output
 {
-    protected $_raw;
+    private $_raw;
 
     public function __construct(array $data)
     {
         $this->_raw = $data;
 
         foreach ($data as $key => $value) {
+            // to lower camelCase
             $_key = lcfirst(str_replace(' ', '', ucwords(str_replace('_', ' ', $key))));
             if (property_exists($this, $_key)) {
                 $this->{$_key} = $value;
