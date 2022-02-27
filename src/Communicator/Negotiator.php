@@ -24,7 +24,7 @@ class Negotiator
      * @param string $channelId
      * @param string $callbackUrl
      * @param array $scopeList : profile, openid, email
-     * @param string|null $status
+     * @param string|null $state
      * @param string|null $botPrompt : normal or aggressive
      * @return string
      */
@@ -32,10 +32,10 @@ class Negotiator
         string $channelId,
         string $callbackUrl,
         array $scopeList = ['profile'],
-        ?string $status = null,
+        ?string $state = null,
         ?string $botPrompt = null
     ): string {
-        $state = $status ?? Nonce::generate();
+        $state = $state ?? Nonce::generate();
 
         $query = [
             'response_type' => 'code',
@@ -55,14 +55,14 @@ class Negotiator
      * 2. コールバックから認証コードを取り出す
      *
      * @param array|string $query
-     * @param string|null $status
+     * @param string|null $state
      * @return string
      * @throws InvalidArgumentException
      * @throws JsonParseException
      */
     public static function extractCode(
         $query,
-        ?string $status = null
+        ?string $state = null
     ): string {
         if (!\is_array($query) && !\is_string($query)) {
             throw new InvalidArgumentException();
@@ -75,9 +75,9 @@ class Negotiator
             }
         }
 
-        if (!\is_null($status)) {
-            if ($status !== $query['status'] ?? null) {
-                throw new ValidationException('status の値が一致しませんでした。');
+        if (!\is_null($state)) {
+            if ($state !== $query['state'] ?? null) {
+                throw new ValidationException('state の値が一致しませんでした。');
             }
         }
 

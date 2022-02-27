@@ -49,20 +49,20 @@ class LINELogin
      * @see https://developers.line.biz/ja/docs/line-login/link-a-bot/#displaying-the-option-to-add-your-line-official-account-as-a-friend
      *
      * @param array $scopeList : profile, openid, email
-     * @param string|null $status
+     * @param string|null $state
      * @param string|null $botPrompt : normal or aggressive
      * @return string
      */
     public function generateRequestUrl(
         array $scopeList = ['profile'],
-        ?string $status = null,
+        ?string $state = null,
         ?string $botPrompt = null
     ): string {
         return Negotiator::generateRequestUrl(
             $this->channelId,
             $this->callbackUrl,
             $scopeList,
-            $status,
+            $state,
             $botPrompt
         );
     }
@@ -71,14 +71,14 @@ class LINELogin
      * 2. コールバックで受けとった値から認証コードを取り出す
      *
      * @param array|string $query
-     * @param string|null $status
+     * @param string|null $state
      * @return string
      * @throws InvalidArgumentException
      * @throws JsonParseException
      */
-    public function extractCode($query, ?string $status = null): string
+    public function extractCode($query, ?string $state = null): string
     {
-        return Negotiator::extractCode($query, $status);
+        return Negotiator::extractCode($query, $state);
     }
 
     /**
