@@ -7,6 +7,8 @@ use Shimoning\LineLogin\Communicator\OAuth;
 use Shimoning\LineLogin\Communicator\UserProfile;
 use Shimoning\LineLogin\Communicator\Friendship;
 
+use Shimoning\LineLogin\Entities\NegotiationOptions;
+use Shimoning\LineLogin\Entities\CallbackParameters;
 use Shimoning\LineLogin\Entities\AccessTokenCapsule;
 use Shimoning\LineLogin\Entities\IdTokenVerifiedResult;
 use Shimoning\LineLogin\Entities\UserProfile as UserProfileEntity;
@@ -56,14 +58,14 @@ class LINELogin
     public function generateRequestUrl(
         array $scopeList = ['profile'],
         ?string $state = null,
-        ?string $botPrompt = null
+        ?NegotiationOptions $options = null
     ): string {
         return Negotiator::generateRequestUrl(
             $this->channelId,
             $this->callbackUrl,
             $scopeList,
             $state,
-            $botPrompt
+            $options
         );
     }
 
@@ -71,14 +73,25 @@ class LINELogin
      * 2. コールバックで受けとった値から認証コードを取り出す
      *
      * @param array|string $query
-     * @param string|null $state
      * @return string
+     * @throws InvalidArgumentException
+     */
+    public function extractCode($query): string
+    {
+        return Negotiator::extractCode($query);
+    }
+
+    /**
+     * コールバックで受けとった値をパースする
+     *
+     * @param array|string $query
+     * @return CallbackParameters
      * @throws InvalidArgumentException
      * @throws JsonParseException
      */
-    public function extractCode($query, ?string $state = null): string
+    public function parseCallbackParameters($query): CallbackParameters
     {
-        return Negotiator::extractCode($query, $state);
+        return Negotiator::parseCallbackParameters($query);
     }
 
     /**

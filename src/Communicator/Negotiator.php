@@ -3,11 +3,12 @@
 namespace Shimoning\LineLogin\Communicator;
 
 use Shimoning\LineLogin\Entities\CallbackParameters;
+use Shimoning\LineLogin\Entities\NegotiationOptions;
+
 use Shimoning\LineLogin\Utilities\Nonce;
 use Shimoning\LineLogin\Utilities\Url;
 
 use Shimoning\LineLogin\Exceptions\InvalidArgumentException;
-use Shimoning\LineLogin\Exceptions\ValidationException;
 use Shimoning\LineLogin\Exceptions\JsonParseException;
 
 /**
@@ -26,61 +27,51 @@ class Negotiator
      * @param string $callbackUrl
      * @param array $scopeList : profile, openid, email
      * @param string|null $state
-     * @param string|null $botPrompt : normal or aggressive
+     * @param NegotiationOptions|null $options
      * @return string
      */
     public static function generateRequestUrl(
         string $channelId,
         string $callbackUrl,
-        array $scopeList = ['profile'],
+        array $scopeList = ['profile'], // TODO: validate scopeList
         ?string $state = null,
-        ?string $botPrompt = null
+        ?NegotiationOptions $options = null
     ): string {
-        $state = $state ?? Nonce::generate();
-
         $query = [
             'response_type' => 'code',
             'client_id'     => $channelId,
             'redirect_uri'  => $callbackUrl,
-            'state'         => $state,
+            'state'         => $state ?? Nonce::generate(),
             'scope'         => implode(' ', $scopeList),
         ];
-        if (!\is_null($botPrompt)) {
-            $query['bot_prompt'] = $botPrompt;
+
+        if ($options) {
+            $query = \array_merge($query, $options->toArray());
         }
 
         return Url::generate(self::OAUTH_URI, '', $query);
     }
 
     /**
-     * 2. コールバックから認証コードを取り出す
+     * 2. コールバックから認証コードを取り出す (short-hand)
+     * 通常は parseCallbackParameters を利用し、 state を検証する。
      *
      * @param array|string $query
-     * @param string|null $state
      * @return string
      * @throws InvalidArgumentException
-     * @throws JsonParseException
      */
-    public static function extractCode(
-        $query,
-        ?string $state = null
-    ): string {
+    public static function extractCode($query): string {
         $parsed = self::parseCallbackParameters($query);
-
-        if (! \is_null($state)) {
-            if ($state !== $parsed->getState()) {
-                throw new ValidationException('state の値が一致しませんでした。');
-            }
-        }
 
         if (empty($parsed->getCode())) {
             throw new InvalidArgumentException();
         }
+
         return $parsed->getCode();
     }
 
     /**
-     * コールバックに付与されたクエリをパースする
+     * コールバックで受けとった値をパースする
      *
      * @param array|string $query
      * @return CallbackParameters

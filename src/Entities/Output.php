@@ -2,6 +2,8 @@
 
 namespace Shimoning\LineLogin\Entities;
 
+use Shimoning\LineLogin\Utilities\Str;
+
 class Output
 {
     private $_raw;
@@ -12,8 +14,8 @@ class Output
 
         foreach ($data as $key => $value) {
             // to lower camelCase
-            $_key = lcfirst(str_replace(' ', '', ucwords(str_replace('_', ' ', $key))));
-            if (property_exists($this, $_key)) {
+            $_key = Str::lowerCamel($key);
+            if (\property_exists($this, $_key)) {
                 $this->{$_key} = $value;
             }
         }
